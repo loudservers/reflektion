@@ -3,7 +3,7 @@
 export TMP_DIR="/tmp/reflekt"
 export GIT_SSH="${TMP_DIR}/.ssh"
 export GIT_ID_RSA="${GIT_SSH}/id_rsa"
-export GIT_SSH_COMMAND="ssh -i ${GIT_ID_RSA}" # Automatically points git to use this command
+export GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=${LAMBDA_TASK_ROOT}/known_hosts -i ${GIT_ID_RSA}" # Automatically points git to use this command
 
 console () {
     echo "$1" 1>&2

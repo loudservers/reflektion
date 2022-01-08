@@ -8,9 +8,9 @@ build: ## Build the container
 	docker build -t ${APP_NAME} .
 
 run: ## Run the container
-	docker run --name ${APP_NAME} --env-file ./env.list -p ${LOCAL_PORT}:8080 -v ~/.aws:/root/.aws:ro ${APP_NAME}:latest
+	docker run --rm --name ${APP_NAME} --env-file ./env.list -p ${LOCAL_PORT}:8080 -v ~/.aws:/root/.aws:ro ${APP_NAME}:latest
 
-start: stop build run
+start: build run
 
 stop: ## Stop a container
 	@docker stop ${APP_NAME}

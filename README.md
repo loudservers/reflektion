@@ -12,6 +12,10 @@ This lambda utilizes AWS' [custom runtime](https://docs.aws.amazon.com/lambda/la
 
 ## Usage
 
+### Requirements
+
+AWS Lambda restrictions won't allow access to some of the underlying file system and the ability to make SSH connections with any preinstalled binaries. Therefore, you'll need to include the binaries for git and ssh yourself. The [git lambda layer](https://github.com/lambci/git-lambda-layer) can provide these for you, simply copy all of the files from the `lambda2` directory into `/opt` on the container and any use of the `git` or `ssh` commands will use the layer binaries. See the repo above for more details and caveats about this usage.
+
 ### Assumptions
 
 #### Destination repo
