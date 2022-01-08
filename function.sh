@@ -1,6 +1,7 @@
 #!/bin/sh
 
-export GIT_SSH="/tmp/.ssh"
+export TMP_DIR="/tmp/reflekt"
+export GIT_SSH="${TMP_DIR}/.ssh"
 export GIT_ID_RSA="${GIT_SSH}/id_rsa"
 export GIT_SSH_COMMAND="ssh -i ${GIT_ID_RSA}" # Automatically points git to use this command
 
@@ -9,8 +10,17 @@ console () {
 }
 
 handler () {
+    trap cleanup EXIT
+
+    main "$1"
+}
+
+main () {
     EVENT_DATA=$1
     console "$EVENT_DATA"
+
+    mkdir -p "${TMP_DIR}"
+
     prepare_key
 
     image_name=$(echo $EVENT_DATA | jq -r .repo_name)
@@ -33,12 +43,13 @@ handler () {
 
     RESPONSE="Complete"
     echo $RESPONSE
+    cleanup
 }
 
 prepare_key () {
     console "Preparing key.."
     echo "$SSH_KEY_PARAMETER" 1>&2
-    mkdir -pv $GIT_SSH
+    mkdir -p $GIT_SSH
 
     aws ssm get-parameter --name "${SSH_KEY_PARAMETER}" --with-decryption --query 'Parameter.Value' --output text > ${GIT_ID_RSA}
     chmod 400 ${GIT_ID_RSA}
@@ -48,7 +59,7 @@ prepare_git () {
     console "Preparing git.."
     local dest_repo_name=$(echo "$DESTINATION_REPO" | cut -d'/' -f2 | cut -d'.' -f1)
 
-    dest_repo_dir="/tmp/$dest_repo_name"
+    dest_repo_dir="${TMP_DIR}/$dest_repo_name"
 
     git clone --single-branch --branch "${BRANCH}" "$DESTINATION_REPO" "$dest_repo_dir"
 
@@ -62,6 +73,7 @@ commit_change () {
     local app_name=$1
     cd "$dest_repo_dir"
     git add -A
+    console "$(git status)"
     if [ -n "$(git status --porcelain)" ]; then
         git commit -m "Updating image tag for $app_name"
 	    git push origin HEAD
@@ -71,5 +83,6 @@ commit_change () {
 }
 
 cleanup () {
-    rm -rf /tmp
+    console "Running cleanup!"
+    rm -rf ${TMP_DIR}
 }
