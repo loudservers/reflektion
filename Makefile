@@ -8,7 +8,9 @@ build: ## Build the container
 	docker build -t ${APP_NAME} .
 
 run: ## Run the container
-	docker run --name ${APP_NAME} -d -p ${LOCAL_PORT}:8080 -v ~/.aws:/root/.aws:ro ${APP_NAME}:latest
+	docker run --name ${APP_NAME} --env-file ./env.list -p ${LOCAL_PORT}:8080 -v ~/.aws:/root/.aws:ro ${APP_NAME}:latest
+
+start: stop build run
 
 stop: ## Stop a container
 	@docker stop ${APP_NAME}
@@ -19,7 +21,7 @@ tail: ## Tail logs
 	docker logs ${APP_NAME} -f
 
 invoke: ## Invoke a command
-	curl -X POST "http://localhost:${LOCAL_PORT}/2015-03-31/functions/function/invocations" -d '{"payload":"hello world!"}'
+	curl -X POST "http://localhost:${LOCAL_PORT}/2015-03-31/functions/function/invocations" --data @test-payload.json
 
 
 .PHONY: run
