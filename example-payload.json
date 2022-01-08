@@ -1,0 +1,7 @@
+{
+    "status": "complete",
+    "git_repo": "loudservers/exampleapp",
+    "app": "exampleapp",
+    "image_repo_name": "loudservers/exampleapp",
+    "image_tag": "abcde1234567"
+}

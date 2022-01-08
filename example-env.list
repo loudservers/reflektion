@@ -1,0 +1,7 @@
+LOGLEVEL=debug
+DESTINATION_REPO=git@github.com:loudservers/gitops.git
+APPS_DIR=apps/app-configs
+IMAGE_NAME_VAR=imageName
+IMAGE_TAG_VAR=imageTag
+BRANCH=testing
+SSH_KEY_PARAMETER=/ssm/path/to/sshprivatekey

@@ -21,7 +21,7 @@ tail: ## Tail logs
 	docker logs ${APP_NAME} -f
 
 invoke: ## Invoke a command
-	curl -X POST "http://localhost:${LOCAL_PORT}/2015-03-31/functions/function/invocations" --data @test-payload.json
+	curl -X POST "http://localhost:${LOCAL_PORT}/2015-03-31/functions/function/invocations" --data @payload.json
 
 
 .PHONY: run
