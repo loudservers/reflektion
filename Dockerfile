@@ -2,7 +2,10 @@ FROM public.ecr.aws/lambda/provided:al2
 
 COPY layer /opt/
 
-RUN yum update && yum install jq unzip -y
+RUN yum update -y && yum install jq unzip make -y
+
+RUN curl -L https://github.com/mikefarah/yq/releases/download/v4.17.2/yq_linux_amd64 -o /usr/bin/yq \
+    && chmod +x /usr/bin/yq
 
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
     && unzip awscliv2.zip \

@@ -1,6 +1,6 @@
 LOGLEVEL=debug
 DESTINATION_REPO=git@github.com:loudservers/gitops.git
-APPS_DIR=apps/app-configs
+APPS_DIR=application-configs
 IMAGE_NAME_VAR=imageName
 IMAGE_TAG_VAR=imageTag
 BRANCH=testing

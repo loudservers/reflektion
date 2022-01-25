@@ -27,10 +27,12 @@ main () {
     image_tag=$(echo $EVENT_DATA | jq -r .image_tag)
     app_name=$(echo $EVENT_DATA | jq -r .app)
 
+    file_name="$app_name/base.yaml"
+
     prepare_git # sets dest_repo_dir
     console "Dir: $dest_repo_dir"
 
-    app_file="$dest_repo_dir/${APPS_DIR}/$app_name.yaml"
+    app_file="$dest_repo_dir/${APPS_DIR}/$file_name"
     console "App: $app_file"
     if [ ! -f "$app_file" ]; then
         console "App file does not exist!"
@@ -72,6 +74,7 @@ commit_change () {
     console "Commiting change.."
     local app_name=$1
     cd "$dest_repo_dir"
+    make render
     git add -A
     console "$(git status)"
     if [ -n "$(git status --porcelain)" ]; then
