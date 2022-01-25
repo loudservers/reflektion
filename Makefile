@@ -23,6 +23,9 @@ tail: ## Tail logs
 invoke: ## Invoke a command
 	curl -X POST "http://localhost:${LOCAL_PORT}/2015-03-31/functions/function/invocations" --data @payload.json
 
+login: ## Login to AWS for Docker - Args: ecr
+	@aws ecr get-login-password | docker login --username AWS --password-stdin ${ecr}
 
-.PHONY: run
+
+.PHONY: build run start stop tail invoke login
 .DEFAULT_GOAL := help
